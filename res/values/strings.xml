@@ -1,0 +1,10 @@
+<resources>
+
+    <string name="app_name">GenttiIndoorMap</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_indoor_map_gentti">IndoorMapGentti</string>
+    <string name="buttonTestName">Test</string>
+    <string name="buttonLocationName">Request Location</string>
+
+</resources>

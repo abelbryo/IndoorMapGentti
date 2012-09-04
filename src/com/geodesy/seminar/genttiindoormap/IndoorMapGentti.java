@@ -45,8 +45,8 @@ import com.ericsson.indoormaps.model.Point;
 public class IndoorMapGentti extends IndoorMapActivity implements
 		LoadingListener, View.OnClickListener {
 
-	private static final int GENTTI_BUILDING_ID = 5717;
-	private static final int GENTTI_MAP_ID = 1460;
+	private static final int GENTTI_BUILDING_ID = 5738;
+	private static final int GENTTI_MAP_ID = 1507;
 	private static final int GENTTI_STYLE_ID = 399;
 
 	private static final String API_KEY = "QdQPEKKpg1vRnmgDaELDBc5mnKGuewiB9B3YZemd";
@@ -85,7 +85,6 @@ public class IndoorMapGentti extends IndoorMapActivity implements
 						}
 					}
 				});
-
 	} // onCreate
 
 	/**

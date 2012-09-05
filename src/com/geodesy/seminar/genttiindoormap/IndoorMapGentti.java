@@ -1,7 +1,5 @@
 package com.geodesy.seminar.genttiindoormap;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,8 +7,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
@@ -26,7 +22,6 @@ import com.ericsson.android.indoormaps.ItemizedOverlay;
 import com.ericsson.android.indoormaps.MapController;
 import com.ericsson.android.indoormaps.MapController.LoadingListener;
 import com.ericsson.android.indoormaps.MapController.MapItemOnFocusChangeListener;
-import com.ericsson.android.indoormaps.MapManager;
 import com.ericsson.android.indoormaps.MapView;
 import com.ericsson.android.indoormaps.MyLocationOverlay;
 import com.ericsson.android.indoormaps.Overlay;
@@ -35,17 +30,14 @@ import com.ericsson.android.indoormaps.Projection;
 import com.ericsson.android.indoormaps.location.IndoorLocationProvider;
 import com.ericsson.android.indoormaps.location.IndoorLocationProvider.IndoorLocationListener;
 import com.ericsson.android.indoormaps.location.IndoorLocationProvider.IndoorLocationRequestStatus;
-import com.ericsson.indoormaps.model.BuildingDescription;
 import com.ericsson.indoormaps.model.GeoPoint;
 import com.ericsson.indoormaps.model.Location;
-import com.ericsson.indoormaps.model.MapDescription;
 import com.ericsson.indoormaps.model.MapItem;
 import com.ericsson.indoormaps.model.Point;
 
 public class IndoorMapGentti extends IndoorMapActivity implements
 		LoadingListener, View.OnClickListener {
 
-	private static final int GENTTI_BUILDING_ID = 5738;
 	private static final int GENTTI_MAP_ID = 1507;
 	private static final int GENTTI_STYLE_ID = 399;
 
@@ -87,98 +79,7 @@ public class IndoorMapGentti extends IndoorMapActivity implements
 				});
 	} // onCreate
 
-	/**
-	 * An ItemizedOverlay class that is customized to listen to a tap and toast
-	 * its tags.
-	 **/
-	private class CustomItemizedOverlay extends ItemizedOverlay {
-		@Override
-		public boolean singleTap(OverlayItem item) {
-			if (super.singleTap(item)) {
-				toast(item.getText());
-				return true;
-			}
-			return false;
-		}
-	}
-
-	public void testClick(View v) {
-		// Select those rooms with tags "room":"yes"
-		final HashMap<String, String> roomTags = new HashMap<String, String>();
-		roomTags.put("room", "yes");
-		final List<MapItem> mapItems = MapManager.getMapItems(roomTags,
-				GENTTI_MAP_ID, getApplicationContext());
-		mMapController.setSelected(mapItems);
-
-		// Get Overlay
-		List<Overlay> mapOverlays = mMapController.getOverlays();
-
-		// Creating itemized overlay
-		CustomItemizedOverlay overlay = new CustomItemizedOverlay();
-		Drawable defaultIcon = getResources().getDrawable(
-				R.drawable.ic_launcher);
-		overlay.setDefaultMarker(defaultIcon);
-
-		// Adding OverlayItem to use the defaultIcon
-		Point point = new Point(100, 10);
-		OverlayItem item = new OverlayItem(point, null, "Overlay Item 1");
-		overlay.addItem(item);
-		mapOverlays.add(overlay);
-		getDescriptionsAsync();
-	}
-
-	private void getDescriptionsAsync() {
-		new AsyncTask<Void, Void, Void>() {
-
-			@Override
-			protected Void doInBackground(Void... params) {
-				// Single map description
-				MapDescription mapDescription;
-				try {
-					mapDescription = MapManager.getMapDescription(
-							GENTTI_MAP_ID, API_KEY, IndoorMapGentti.this);
-					Log.d(LOG_TAG, mapDescription.toString());
-				} catch (IOException e) {
-					Log.e(LOG_TAG,
-							"Map Description returned error: " + e.getMessage(),
-							e);
-				}
-
-				// Single building description
-				BuildingDescription buildingDescription;
-				try {
-					buildingDescription = MapManager.getBuildingDescription(
-							GENTTI_BUILDING_ID, API_KEY, IndoorMapGentti.this);
-					Log.d(LOG_TAG, buildingDescription.toString());
-				} catch (IOException e) {
-					Log.e(LOG_TAG,
-							"Building description returned error: "
-									+ e.getMessage(), e);
-				}
-
-				try {
-					Context c = getApplicationContext();
-					// Map descriptions for all maps cached on device
-					for (MapDescription b : MapManager.getMapDescriptions(c,
-							true, API_KEY)) {
-						Log.d(LOG_TAG, "Maps - On device: " + b.toString());
-					}
-
-					// Get map descriptions for all maps accessible for your API
-					// key on the server
-					for (MapDescription b : MapManager.getMapDescriptions(c,
-							false, API_KEY)) {
-						Log.d(LOG_TAG, "Maps - On server: " + b.toString());
-					}
-
-				} catch (IOException e) {
-					Log.d(LOG_TAG, "Couldn't retrieve info from server", e);
-				}
-				return null;
-			}
-		}.execute();
-	}
-
+	
 	class CustomOverlay extends Overlay {
 		private final GestureDetector mGestureDetector;
 		private MapView mTouchedMapView;
@@ -225,7 +126,7 @@ public class IndoorMapGentti extends IndoorMapActivity implements
 	}
 
 	private void toast(String text) {
-		Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+		Toast.makeText(getApplicationContext(),text, Toast.LENGTH_LONG).show();
 	}
 
 	public void requestLocation(View v) {
@@ -283,7 +184,7 @@ public class IndoorMapGentti extends IndoorMapActivity implements
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.buttonTest:
-			testClick(v);
+			toast("Testing ...");
 			break;
 		case R.id.buttonLocation:
 			requestLocation(v);

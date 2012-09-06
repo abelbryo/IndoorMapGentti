@@ -36,7 +36,7 @@ import com.ericsson.indoormaps.model.MapItem;
 import com.ericsson.indoormaps.model.Point;
 
 public class IndoorMapGentti extends IndoorMapActivity implements
-		LoadingListener, View.OnClickListener {
+		LoadingListener {
 
 	private static final int GENTTI_MAP_ID = 1507;
 	private static final int GENTTI_STYLE_ID = 399;
@@ -77,6 +77,22 @@ public class IndoorMapGentti extends IndoorMapActivity implements
 						}
 					}
 				});
+        
+        final Button testButton = (Button) findViewById(R.id.buttonTest);
+        testButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                toast("Testing ...");
+            }
+        });
+
+        final Button locationButton = (Button) findViewById(R.id.buttonLocation);
+        locationButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                requestLocation(v); 
+            }
+        });
+
+
 	} // onCreate
 
 	
@@ -180,6 +196,9 @@ public class IndoorMapGentti extends IndoorMapActivity implements
 		return true;
 	}
 
+
+    /*
+
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -193,6 +212,7 @@ public class IndoorMapGentti extends IndoorMapActivity implements
 			break;
 		}
 	}
+    */
 
 	@Override
 	public void onMapLoading(LoadingState state, int mapID, String message) {
